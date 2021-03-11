@@ -42,6 +42,8 @@ class Mftool():
         self._open_ended_equity_category = self._const['open_ended_equity_category']
         self._open_ended_debt_category = self._const['open_ended_debt_category']
         self._open_ended_hybrid_category= self._const['open_ended_hybrid_category']
+        self._open_ended_solution_category = self._const['open_ended_solution_category']
+        self._open_ended_other_category = self._const['open_ended_other_category']
         self._amc=self._const['amc']
         self._user_agent = self._const['user_agent']
         self._scheme_codes=self.get_scheme_codes().keys()
@@ -292,12 +294,41 @@ class Mftool():
         :return: json format
         :raises: HTTPError, URLError
         """
-        get_open_ended_debt_scheme_url = self._get_open_ended_equity_scheme_url.replace('SEQ','SHY')
+        get_open_ended_hybrid_scheme_url = self._get_open_ended_equity_scheme_url.replace('SEQ','SHY')
         scheme_performance = {}
         for key in self._open_ended_hybrid_category.keys():
-            scheme_performance_url = get_open_ended_debt_scheme_url.replace('CAT',self._open_ended_hybrid_category[key])
+            scheme_performance_url = get_open_ended_hybrid_scheme_url.replace('CAT',self._open_ended_hybrid_category[key])
             scheme_performance[key] = self.get_daily_scheme_performance(scheme_performance_url, False)
         return self.render_response(scheme_performance,as_json)
+
+
+    def get_open_ended_solution_scheme_performance(self, as_json=False):
+        """
+        gets the daily performance of open ended Solution-Oriented schemes for all AMCs
+        :return: json format
+        :raises: HTTPError, URLError
+        """
+        get_open_ended_solution_scheme_url = self._get_open_ended_equity_scheme_url.replace('SEQ','SOLU')
+        scheme_performance = {}
+        for key in self._open_ended_solution_category.keys():
+            scheme_performance_url = get_open_ended_solution_scheme_url.replace('CAT',self._open_ended_solution_category[key])
+            scheme_performance[key] = self.get_daily_scheme_performance(scheme_performance_url, False)
+        return self.render_response(scheme_performance,as_json)
+
+    
+    def get_open_ended_other_scheme_performance(self, as_json=False):
+        """
+        gets the daily performance of open ended index and FoF schemes for all AMCs
+        :return: json format
+        :raises: HTTPError, URLError
+        """
+        get_open_ended_other_scheme_url = self._get_open_ended_equity_scheme_url.replace('SEQ','OTH')
+        scheme_performance = {}
+        for key in self._open_ended_solution_category.keys():
+            scheme_performance_url = get_open_ended_other_scheme_url.replace('CAT',self._open_ended_other_category[key])
+            scheme_performance[key] = self.get_daily_scheme_performance(scheme_performance_url, False)
+        return self.render_response(scheme_performance,as_json)    
+
 
     def get_daily_scheme_performance(self, performance_url,as_json):
         fund_performance = []
@@ -353,27 +384,27 @@ class Mftool():
         return self.render_response(amc_profiles, as_json)
     
     def get_average_aum(self,year_quarter,as_json=True):
-    """
-       gets the Avearage AUM data for all Fund houses
-       :param year_quarter: string 'July - September 2020'
-       #quarter format should like - 'April - June 2020'
-       :return: json format
-       :raises: HTTPError, URLError
-    """
-    all_funds_aum = []
-    url = self._get_avg_aum
-    html = requests.post(url,headers=self._user_agent,data={"AUmType":'F',"Year_Quarter":year_quarter})
-    soup = BeautifulSoup(html.text, 'html.parser')
-    rows = soup.select("table tbody tr")
-    for row in rows:
-        aum_fund = {}
-        if len(row.findAll('td')) > 1:
-            aum_fund['Fund Name']= row.select("td")[1].get_text().strip()
-            aum_fund['AAUM Overseas']= row.select("td")[2].get_text().strip()
-            aum_fund['AAUM Domestic'] = row.select("td")[3].get_text().strip()
-            all_funds_aum.append(aum_fund)
-            aum_fund = None
-    return self.render_response(all_funds_aum, True)
+        """
+            gets the Avearage AUM data for all Fund houses
+            :param year_quarter: string 'July - September 2020'
+            #quarter format should like - 'April - June 2020'
+            :return: json format
+            :raises: HTTPError, URLError
+        """
+        all_funds_aum = []
+        url = self._get_avg_aum
+        html = requests.post(url,headers=self._user_agent,data={"AUmType":'F',"Year_Quarter":year_quarter})
+        soup = BeautifulSoup(html.text, 'html.parser')
+        rows = soup.select("table tbody tr")
+        for row in rows:
+            aum_fund = {}
+            if len(row.findAll('td')) > 1:
+                aum_fund['Fund Name']= row.select("td")[1].get_text().strip()
+                aum_fund['AAUM Overseas']= row.select("td")[2].get_text().strip()
+                aum_fund['AAUM Domestic'] = row.select("td")[3].get_text().strip()
+                all_funds_aum.append(aum_fund)
+                aum_fund = None
+        return self.render_response(all_funds_aum, True)
     
     def get_mutual_fund_ranking(self, as_json):
         """

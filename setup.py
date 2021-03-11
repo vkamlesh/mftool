@@ -1,3 +1,4 @@
+#!/usr/bin/env /Users/vkamlesh/.virtualenvs/finpy/bin/python
 from setuptools import setup, Extension ,find_packages
 from os import path
 

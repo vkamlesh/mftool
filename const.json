@@ -14,7 +14,9 @@
 		"ELSS": "SEQ_ELSS",
 		"Contra": "SEQ_CONT",
 		"Dividend Yield": "SEQ_DIVY",
-		"Focused": "SEQ_FOC"
+		"Focused": "SEQ_FOC",
+		"Sectoral/Thematic" : "SEQ_SEC",
+		"Flexi Cap" : "SEQ_FLEXI"
 	},
 	"open_ended_debt_category": {
 		"Long Duration": "SDT_LND",
@@ -41,8 +43,21 @@
 		"Conservative Hybrid": "SHY_CH",
 		"Equity Savings": "SHY_EQS",
 		"Arbitrage": "SHY_AR",
-		"Multi Asset Allocation": "SHY_MAA"
+		"Multi Asset Allocation": "SHY_MAA",
+		"Dynamic Asset Allocation or Balanced Advantage" : "SHY_DYAA"
 	},
+    "open_ended_solution_category": {
+		"Children's" : "SOLU_CH",
+		"Retirement" : "SOLU_RET"
+
+	},
+	"open_ended_other_category": {
+		"Index Funds/ETFs" : "OTH_INDEX",
+		"FoFs(Oversease/Domestic)" : "OTH_FOF"
+
+	},
+
+	
 	"amc": [3, 53, 1, 4, 59, 46, 32, 6, 47, 54, 27, 9, 37, 20, 57, 48, 68, 62, 65, 63, 42, 70, 16, 17, 56, 18, 69, 45, 55, 21, 58, 64, 10, 13, 35,
 		22, 66, 33, 25, 26, 61, 28, 71
 	]
